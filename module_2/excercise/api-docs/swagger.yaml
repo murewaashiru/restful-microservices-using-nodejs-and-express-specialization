@@ -1,0 +1,169 @@
+openapi: 3.0.4
+info:
+  title: A User API
+  description: This is a sample User API Server based on the OpenAPI 3.0 specification. The APIs of the application are not implemented as stated in this document.
+  termsOfService: https://swagger.io/terms/
+  # contact:
+  #   email: apiteam@swagger.io
+  # license:
+  #   name: Apache 2.0
+  #   url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
+host: localhost:5000
+basePath: api/v1
+servers:
+  - url: http://localhost:5000/api/v1
+tags:
+  - name: user
+    description: Operations about user
+paths:
+  /user:
+    get:
+      tags:
+        - user
+      summary: Get all users
+      description: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid userId supplied
+        '404':
+          description: User not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by user id.
+      description: Get user detail based on userId.
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: The id that needs to be fetched. Use 101 for testing
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid userId supplied
+        '404':
+          description: User not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - user
+      summary: Update user resource.
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: bad request
+        '404':
+          description: user not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 101
+        userName:
+          type: string
+          example: James
+      xml:
+        name: user
+    
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+      xml:
+        name: '##default'
+    
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  
+  requestBodies:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  
