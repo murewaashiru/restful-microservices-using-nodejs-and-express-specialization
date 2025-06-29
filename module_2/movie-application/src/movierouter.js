@@ -1,5 +1,8 @@
 
 //import all the modules required 
+const express = require('express');
+const router = express.Router();
+const movieController = require('./moviecontroller');
 
 /**
  * API to get the details of all movies
@@ -10,9 +13,13 @@ router.get("/", (req, res) => {
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.getMovies((err, results) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(200).send({STATUS:"OK",data:results});
     })
   } catch (err) {
-   
+   res.status(400).send({STATUS: 'Try again after some time'});
   }
 });
 /**
@@ -23,16 +30,19 @@ router.get("/", (req, res) => {
 router.get("/:movieId", (req, res) => {
   try {
     //retreive moviedId from req.params
-  
+    const movieId = req.params.movieId;
 
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.getMovieById(movieId, (err, results) => {
-     
+     if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(200).send({STATUS:"OK",data:results});
     });
 
   } catch (err) {
-    
+    res.status(400).send({STATUS: 'Try again after some time'});
   }
 });
 
@@ -44,16 +54,22 @@ router.post("/", (req, res) => {
   try {
     //retreive movieDetails from req.body
     const movieDetails = {
-      
+      movieName: req.body.movieName,
+      director: req.body.director,
+      rating: req.body.rating,
+      id: req.body.id
     }
      //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.saveMovieDetails(movieDetails, (err, results) => {
-     
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(201).send({STATUS: "OK", data: results});
     });
 
   } catch (err) {
-   
+   res.status(400).send({STATUS: 'Try again after some time'});
   }
 });
 
@@ -64,19 +80,24 @@ router.post("/", (req, res) => {
 router.patch("/:movieId", (req, res) => {
   try {
      //retreive moviedId from req.params
-    
+    const movieId = req.params.movieId;
     //retreive movieDetails from req.body
     const movieDetails = {
-     
+     movieName: req.body.movieName,
+      director: req.body.director,
+      rating: req.body.rating,
     }
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.updateMovieDetails(movieId, movieDetails, (err, results) => {
-    
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(200).send({STATUS: "OK", data: results});
     });
 
   } catch (err) {
-   
+   res.status(400).send({STATUS: 'Try again after some time'});
   }
 });
 
@@ -86,16 +107,19 @@ router.patch("/:movieId", (req, res) => {
  */
 router.delete("/:movieId", (req, res) => {
   try {
-     //retreive moviedId from req.params
+    //retreive moviedId from req.params
+    const movieId = req.params.movieId;
    
        //calling controller method and passing the parameters 
       //return the response as per error or result coming from controller
     movieController.deleteMovieById(movieId, (err, results) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(201).send({STATUS: "OK", data: results});
     })
-     
-
   } catch (err) {
-
+    res.status(400).send({STATUS: 'Try again after some time'});
   }
 });
 
