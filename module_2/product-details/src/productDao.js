@@ -1,51 +1,81 @@
+const fs = require('fs');
+const path = require('path');
 
-//import fs module
-
-
-
+const filePath = path.join(__dirname, 'products.json');
 
 //The getProducts function take done as callback
-//It will read the product.json file
-
 const getProducts = function(done){
-    
-
-//parse the filecontent and save it in another varible say productdata
-//return the callback with first parameter as undefined and second parameter as productdata
-       
+  fs.readFile(filePath, (err, fileContent) => {
+      if (err) {
+        return done(`Encountered error while reading file: ${err.message}`);
+      }
+      let productdata = JSON.parse(fileContent);
+      return done(undefined, productdata);
+  });    
 }
 
 
 //The function getProductById will take two parameters first the id and second the callback
-//It will read the product.json file
 const getProductById = function(id,done){
-    //write all the logical steps
-    //return the callback with first parameter as undefined and second parameter as productDetails
-      
+  fs.readFile(filePath, (err, fileContent)=>{
+    if (err) {
+      return done(`Encountered error while reading file: ${err.message}`);
+    }
+    let products = JSON.parse(fileContent);
+    const productDetails = products.find(product => product.id == id);
+    if (productDetails === undefined || productDetails.length === 0) {
+      return done(`Product with id ${id} not found`);
+    }
+    return done(undefined, productDetails);
+  });    
 }
 
 
 //The saveProductDetails method will take productDetails and done as callback
 //It will read the product.json file
 const saveProductDetails = function (ProductDetails, done) {
-  //write all the logical steps
-  //parse the filecontent and save it in another varible say productdata
-  //push the productDetails in the productData
-      
-  //Write the productData into the file 
-     
-  //return the callback with undefined and ProductDetails
-     
-    
-  }
+  fs.readFile(filePath, (err, fileContent) => {
+    if (err) {
+      return done(`Encountered error while reading file: ${err.message}`);
+    }
+    let productdata = JSON.parse(fileContent);
+    // Assign a new id (incremental based on max id in file)
+    let newId = 1;
+    if (productdata.length > 0) {
+      newId = Math.max(...productdata.map(p => Number(p.id) || 0)) + 1;
+    }
+    const newProduct = { id: newId.toString(), ...ProductDetails };
+    productdata.push(newProduct);
+    fs.writeFile(filePath, JSON.stringify(productdata, null, 2), (err) => {
+      if (err) {
+        return done(`Encountered error while writing file: ${err.message}`);
+      }
+      return done(undefined, newProduct);
+    });
+  });
+}
 
-  //The method deleteProductById will take productId and done as parameters
-  //It will read the product.json file
-
-  const deleteProductById = function(productId, done){
-    //Write all the logical steps
-     //return the callback with first parameter as undefined and second parameter as productDetails
-  }
+//The method deleteProductById will take productId and done as parameters
+//It will read the product.json file
+const deleteProductById = function(productId, done){
+  fs.readFile(filePath, (err, fileContent) => {
+    if (err) {
+      return done(`Encountered error while reading file: ${err.message}`);
+    }
+    let productdata = JSON.parse(fileContent);
+    const index = productdata.findIndex(product => product.id == productId);
+    if (index === -1) {
+      return done(`Product with id ${productId} not found`);
+    }
+    const deletedProduct = productdata.splice(index, 1)[0];
+    fs.writeFile(filePath, JSON.stringify(productdata, null, 2), (err) => {
+      if (err) {
+        return done(`Encountered error while writing file: ${err.message}`);
+      }
+      return done(undefined, deletedProduct);
+    });
+  });
+}
 
 
 module.exports ={
