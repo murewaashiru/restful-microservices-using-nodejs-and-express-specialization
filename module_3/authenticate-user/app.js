@@ -6,6 +6,8 @@ const userRouter = require('./src/Users')
 const verifyAuth = require('./src/aunthentication/authMiddleware')
 const dateFormat = require('date-format')
 const morgan = require('morgan')
+const dotenv = require("dotenv");
+dotenv.config();
 
 app.use(express.json())
 morgan.token('time',()=> dateFormat.asString(dateFormat.ISO8601_FORMAT,new Date()))
@@ -23,3 +25,5 @@ const server = app.listen(config.PORT, () => {
 module.exports = server;
 
 
+// "test": "./node_modules/.bin/mocha ./test/*.spec.js",
+// "test": "mocha ./test/*.spec.js",
