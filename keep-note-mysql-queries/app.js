@@ -19,8 +19,13 @@ morgan.token('time',()=> dateFormat.asString(dateFormat.ISO8601_FORMAT,new Date(
 app.use(morgan('[:time] :remote-addr :method :url :status :res[content-length] :response-time ms'));
 
 //Register routes
+const authRoutes = require('./src/routes/auth.routes.js');
 const indexRoutes = require('./src/routes/index.routes.js');
-app.use('/', indexRoutes);
+const userRoutes = require('./src/routes/user.routes.js');
+app.use('/api/auth', authRoutes);
+app.use('/api', indexRoutes);
+app.use('/api/users', userRoutes);
+
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, ()=>{

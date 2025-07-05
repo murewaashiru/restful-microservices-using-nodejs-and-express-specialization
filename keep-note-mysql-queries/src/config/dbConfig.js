@@ -1,4 +1,4 @@
-const config = require('./config.js');
+const config = require('../../config.js');
 module.exports = {
     HOST: config.DATABASE_HOST,
     USER: config.DATABASE_USER,
