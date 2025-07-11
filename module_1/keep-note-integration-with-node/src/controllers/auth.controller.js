@@ -1,23 +1,21 @@
 const User = require('../dao/user.dao.js'); 
+const authService = require('../services/auth.service.js');
+const { responseDto } = require('../dto/response');
 
 exports.login = (req, res) => {
-    console.log("login called");
     const user_id = req.body.user_id; //TODO: Fix this not working
     const user_password = req.body.user_password;
     // Validate request
     if (!(user_id || user_password)) {
-        res.status(400).send({
-            message: "Username and password cannot be empty"
-        });
+        responseDto(res, 400, "99", "user_id and user_password are required");
         return;
     }
     User.login(user_id, user_password, (err, data) => {
         if(err){
-            res.status(500).send({
-                message: err.message || "Some error occurred while loging in."
-            });
+            responseDto(res, 403, "99", err.responseMsg || "Some error occurred while loging in.");
+            return;
         } else{
-            res.send(data);
+            responseDto(res, 200, "00", "Login successful", { token:authService.createToken(data)});
         }
     });
 };

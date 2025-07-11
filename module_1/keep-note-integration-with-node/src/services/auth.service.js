@@ -15,7 +15,6 @@ function verifyUser({user_id,password},userData){
 //This function will create JWT token and return the token
 // use the method jwt.sign having two parameters payload and Auth_Secret
 function createToken(userdata) {
-  //create payload
    const payload = {
     role:"USER",
     user_id:userdata.user_id,

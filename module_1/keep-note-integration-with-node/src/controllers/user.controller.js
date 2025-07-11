@@ -1,6 +1,7 @@
 const User = require('../dao/user.dao.js'); 
+const { responseDto } = require('../dto/response');
 
-//Create and save a new product
+//Create and save a new user
 exports.create = (req, res) => {
     const user_name = req.body.user_name;
     const user_password = req.body.user_password;
@@ -8,9 +9,7 @@ exports.create = (req, res) => {
     const user_added_date = new Date();
     // Validate request
     if (!(user_name || user_password || user_mobile)) {
-        res.status(400).send({
-            message: "user_name, user_password, and user_mobile are required"
-        });
+        responseDto(res, 400, "99", "user_name, user_password, and user_mobile are required");
         return;
     }
 
@@ -25,25 +24,22 @@ exports.create = (req, res) => {
     //Save User in the database
     User.create(user, (err, data) => {
         if (err) {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the user."
-            });
+            responseDto(res, 500, "99", err.responseMsg || "Some error occurred while retrieving users.");
+            return;
         } else{
-            res.send(data);
+            responseDto(res, 200, "00", "Successful", data);
         }
     });
 };
 
-// Retrieve all products from the database (with condition).
+// Retrieve all users
 exports.findAll = (req, res) => {
-    console.log("findAll called");
     User.getAll((err, data) => {
         if(err){
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving users."
-            });
+            responseDto(res, 500, "99", err.responseMsg || "Some error occurred while retrieving users.");
+            return;
         } else{
-            res.send(data);
+            responseDto(res, 200, "00", "Successful", data);
         }
     });
 };

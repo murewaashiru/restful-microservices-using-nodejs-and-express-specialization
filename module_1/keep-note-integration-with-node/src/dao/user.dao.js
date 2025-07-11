@@ -11,7 +11,7 @@ User.create = (newuser, result) => {
     sql.query("INSERT INTO User SET ?", newuser, (err, res) => {
         if (err) {
             console.error("Error creating User:", err);
-            result( {message: err}, null);
+            result( {responseMsg: err}, null);
             return;
         }
         result(null, { id: res.insertId, username: newuser.user_name });
@@ -23,7 +23,7 @@ User.getAll = (result) => {
     sql.query(query, (err, res) => {
         if (err) {
             console.error("Error retrieving Users:", err);
-            result(err, null);
+            result({responseMsg: err}, null); 
             return;
         }
         result(null, res);
@@ -35,15 +35,15 @@ User.login = (id, password, result) => {
     sql.query(query, [id, password], (err, res) => {
         if (err) {
             console.log(`Error logging in: ${res}`);
-            result( {message: err}, null);
+            result( {responseMsg: err}, null);
             return;
         }
         if (res.length === 0) {
             console.log(`Login failed for user_id: ${id}`);
-            result({ kind: "not_found",message: "Invalid credentials" }, null);
+            result({ kind: "not_found", responseMsg: "Invalid credentials" }, null);
             return;
         }
-        result(null, `Login successful`);
+        result(null, { user_id: res[0].user_id, user_name: res[0].user_name });
     });
 };
 
