@@ -20,7 +20,7 @@ Category.create = (newRecord, result) => {
 Category.getAll = (category_creation_date, result) => {
     let query = "SELECT * FROM Category";
     if(category_creation_date){
-        query = `${query} WHERE category_creation_date > ${category_creation_date}`;
+        query = `${query} WHERE category_creation_date > '${category_creation_date}'`;
     }
     sql.query(query, (err, res) => {
         if (err) {

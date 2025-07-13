@@ -23,11 +23,13 @@ app.use(morgan('[:time] :remote-addr :method :url :status :res[content-length] :
 const authRoutes = require('./src/routes/auth.routes.js');
 const categoryRoutes = require('./src/routes/category.routes.js')
 const indexRoutes = require('./src/routes/index.routes.js');
+const reminderRoutes = require('./src/routes/reminder.routes.js');
 const userRoutes = require('./src/routes/user.routes.js');
 const verifyAuth = require('./src/middleware/auth.middleware.js')
 app.use('/api/auth', authRoutes);
 app.use('/api/category', verifyAuth, categoryRoutes);
 app.use('/api', indexRoutes);
+app.use('/api/reminder', verifyAuth, reminderRoutes);
 app.use('/api/users', userRoutes);
 
 

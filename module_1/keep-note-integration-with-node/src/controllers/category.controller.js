@@ -9,7 +9,7 @@ const create = (req, res) => {
     const category_creator = req.claims.user_name;
 
     // Validate request
-    if (!(category_name || category_description)) {
+    if (!(category_name || category_descr)) {
         responseDto(res, 400, "99", "category_name and category_description are required");
         return;
     }
@@ -66,7 +66,7 @@ const updateById = (req, res) => {
     const category_descr = req.body.category_description;
 
     // Validate request
-    if (!(category_name || category_description)) {
+    if (!(category_name || category_descr)) {
         responseDto(res, 400, "99", "category_name OR category_description are required");
         return;
     }
