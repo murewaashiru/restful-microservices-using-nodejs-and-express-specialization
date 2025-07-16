@@ -31,3 +31,7 @@ As the first step in creating the application, create the necessary DB schema in
 - View all categories and reminders
 - Update an existing category, or reminder
 - Delete an existing note, category, or reminder
+
+### Note
+
+Boiler plate code was not used due to Coursera platform issues.
